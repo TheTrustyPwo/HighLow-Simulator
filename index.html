@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html lang="en-US">
+
+<head>
+<title>Hi Lo Calculator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+	 		<link rel="stylesheet" href="css/css-topbar.css" media="print" onload="this.media='all'">
+	 	
+	 		<link rel="stylesheet" href="css/css-main.css" media="print" onload="this.media='all'">
+	 	
+	 		<link rel="stylesheet" href="css/css-button_round.css" media="print" onload="this.media='all'">
+	 	
+	 		<link rel="stylesheet" href="css/css-help.css" media="print" onload="this.media='all'">
+	 	
+	 		<link rel="stylesheet" href="css/css-tips.css" media="print" onload="this.media='all'">
+	 	
+	 		<link rel="stylesheet" href="css/css-fonts.css" media="print" onload="this.media='all'">
+	 	<!-- Meta Descriptions	 -->
+<meta name="Description" content="Advanced calculator for Hi Low game made by ThePwo">
+
+<style type="text/css">
+	/*vars*/
+:root {
+	--topbar-height: 80px;
+	--azul: #85d3d3; 
+	--dark-grey: #333;
+	--mdark-grey: #666;
+	--mlight-grey: #aaa;
+	--light-grey: #eee;
+	--card-width: 32rem;
+	--double-card-width: 65rem;
+	--tip-height: 3em; 
+}
+
+/*basic font size*/
+html {
+	font-size: 16px;
+}
+
+body { 
+	color: var(--dark-grey);
+	font-size: 11px;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"; 
+	background-color: var(--light-grey);
+	margin: 0;
+}
+
+a {text-decoration: none; color: #666;}
+
+/*Include inputs.css for nice formats*/
+input { font-family: inherit; line-height: inherit; color: var(--mdark-grey); }
+
+/*Topbar positioning*/
+.topbar {position: absolute; top: 0; height: var(--topbar-height); width: 100%; border-bottom: 2px solid #666; 
+	background-color: var(--dark-grey); justify-content: space-between; z-index: 10;}
+
+/*logo*/
+.topbar-left img.logo {height: 40px; margin: 0 auto;}
+.topbar-right {width: 100%;}
+
+/* Elements */
+.button { padding: 0.2em; display: flex; flex-direction: column; justify-content: center; text-align: center;}
+.button:hover {box-shadow: 0 0 5em -1em white;}
+
+/*buttons*/
+.topbar .button {width: 115px; height: calc(var(--topbar-height) - 5px); border-left: 1px solid #666; 
+	font-family: 'Open Sans Condensed'; font-size:1.6em; font-weight: bold; }
+.topbar .active .button {color: white;}
+.topbar .menu-item {position: relative;}
+.topbar .menu-item:hover .button { color: #85d3d3; background-color: var(--light-grey); border-color: var(--light-grey); }
+.topbar .button i {font-size: 1.5em;}
+
+.dropdown-content {display: none; position: absolute;}
+
+/* flexs and grids containers */
+.full-container {margin-top: var(--topbar-height); padding-top: 1em;}
+.flex-container {display: flex; justify-content: center; }
+.flex-container.space-around {justify-content: space-around;}
+.flex-container.flex-wrap {flex-wrap: wrap;}
+.flex-col { flex-direction: column;}
+.flex-row-rev { flex-direction: row-reverse; justify-content: flex-start; }
+
+.grid-container { display: grid; align-items:center; gap: 1rem; grid-template-columns: 1fr 1fr; margin: 0 auto; width: fit-content}
+.grid-1col { grid-template-columns: 1fr; }
+.grid-12col { grid-template-columns: 1fr 2fr; }
+.grid-21col { grid-template-columns: 2fr 1fr; }
+.grid-3col {grid-template-columns: 1fr 1fr 1fr; }
+
+.grid-width { width: 100% }
+.grid-autoflow-col {grid-auto-flow: column;}
+
+div.maintitle {text-align: center; margin: 1em auto 2em; width: max-content}
+div.maintitle h1 {font-size: 3em; margin: 0 .3em; padding: 0;}
+
+.card {
+	position: relative; width: var(--card-width); height: 13rem; display: flex; flex-direction: column; justify-content: flex-start;  
+	border-radius: 1em ;padding:0; border: 1px solid; 
+}
+.card.double-w { width: var(--double-card-width); }
+
+/* margins and paddings */
+.m0 {margin: 0;}
+.m1 {margin: 1rem;}
+.m0a {margin: 0 auto}
+.mr1 {margin-right: 1rem;}
+.mr2 {margin-right: 2rem;}
+.ml1 {margin-left: 1rem;}
+.ml2 {margin-left: 2rem;}
+.mt0 {margin-top: 0;}
+.mt1 {margin-top: 1rem;}
+.mb0 {margin-bottom: 0;}
+.mb1 {margin-bottom: 1rem;}
+.mb2 {margin-bottom: 2rem;}
+
+.p0 {padding: 0}
+.p1 {padding: 1em; }
+.pr1 {padding-right: 1em;}
+.pr2 {padding-right: 2em;}
+.pt3 {padding-top: 3em;}
+.ptb1 {padding: 1em 0;}
+
+.h100 { height: 100%; }
+.w100 { width: 100% }
+.ta-c {text-align: center}
+.ta-r {text-align: right;}
+.ta-l {text-align: left;}
+
+.align-center {align-items: center;}
+/* Visibility */
+.hidden {display: none;}
+.opaque {opacity: 0;}
+
+@media screen and (max-width: 1200px) {
+	html {font-size: 12px;}
+	div.maintitle {width: 90vw; margin: 0 auto 1em;}
+}
+
+@media screen and (max-width: 1000px) {
+	html {font-size: 10px;}
+	.topbar .button { border: none; font-size: 1.4em; width: 90px;}
+	.topbar-left { margin-right: 2em;}
+	.card {height: 100%;}	*
+}
+
+
+@media screen and (max-width: 700px) { 
+	/*Topbar elements*/
+	.topbar {justify-content: flex-end;}	
+	.topbar-left {display: none;}
+	.topbar-right > div { justify-content: space-between; }
+	.topbar-right .menu-item {width: 100%; margin:0;}
+	.topbar-right .button {border: none; width: 100%;  font-size: 1.7em; margin: 0 auto; padding: 0;}
+	.topbar .menu-item {position: unset;}
+
+	/*Body content*/
+	.grid-container:not(.keep-row) {grid-template-columns: 1fr;}
+	.grid-autoflow-col {grid-auto-flow: unset;}
+	.card {width: 90vw; height: auto;}
+	.card.double-w { width: 90vw; }
+	.full-container .flex-container:not(.keep-row) {flex-direction: column;}
+
+	div.maintitle {width: 60vw;}
+	div.maintitle h1{font-size: 2em}
+
+}
+
+@media screen and (max-width: 400px) { 
+	.topbar .button { border: none; font-size: 1.0em; }
+	div.maintitle {width: 80vw;}
+	div.maintitle h1{font-size: 1.5em}
+	h3 {font-size: 1em; padding: 0; margin: 0;}
+}
+
+.header {
+	grid-area: header;
+}
+.calc-left {
+	grid-area: calcleft;
+}
+.calc-right {
+	grid-area: calcright;
+}
+.main {
+	grid-area: main;
+}
+.advanced {
+	grid-area: advanced;
+}
+.footer {
+	grid-area: footer;
+	color: #999;
+}
+
+.calc-container {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-rows: auto;
+  	grid-template-areas: 
+    "header header header"
+    "calcleft main  calcright"
+    "advanced advanced advanced"
+    "footer footer footer";
+   gap: 1em;
+   margin: 1em;
+}
+
+.calc-settings {
+	background: #232323;
+	padding: 0.4em;
+	border-radius: 14px;			
+}
+
+.calc-settings span {
+	text-align: right;
+}
+
+button#res_num:hover {
+	cursor: default;
+	color: lime;
+	background-color: #232323;
+	box-shadow: none; 
+}
+
+
+.footer .calc-message {
+	color: var(--azul);
+	font-size: 0.8em;
+}
+
+#result_center {
+	padding: 1rem;
+	background: #232323;
+	margin-top: 1em;
+	border-radius: 10px;
+	gap: .5rem;
+}
+
+#result_center div {
+	background-color: var(--dark-grey);
+	border-radius: 7px;
+	padding: .3rem;
+}
+
+#result_center .res-num {
+	color: lime;
+	font-weight: bold;
+	font-size: 1.4em;
+	line-height: 2em;
+}
+
+.input-small {
+	font-family: monospace;
+	display: inline-block;
+	width: 10ch;
+	text-align: center;
+	font-size: 0.8em;
+	line-height: 2em;
+	border: 1px solid #444;
+	border-left: 1px solid;
+	border-style: inset;
+	border-inline: none;
+	background: #222;
+	color: #1aff00;
+	vertical-align: middle;
+	border-radius: 5px;
+	margin: 0 auto;
+}
+
+.input-small.head2 {
+	/*background-color: transparent; 
+	border: none;*/ 
+	font-size: 1.2em
+}
+
+.input-small:focus {
+	outline: none;
+}
+
+.input-small:disabled {
+	color: #999;
+}
+
+/* Hhide hidden elemtns during first load */
+.hidden { display: none; }
+.tip:not(.hide) {height: var(--tip-height);}
+
+@media screen and (max-width: 1200px) {
+	.calc-container {
+		grid-template-columns: 1fr 1fr;
+		grid-template-areas: "header header"
+	    "calcleft calcright"
+	    "advanced advanced"
+	    "main main"
+	    "footer footer";
+	}
+	.calc-container button {
+		margin-bottom: .5em; 
+	}
+/*	.grid-container:not(.keep-row) {grid-template-columns: 1fr;}
+	.grid-2col { grid-template-columns: 1fr; }
+	.grid-autoflow-col {grid-auto-flow: unset;}
+	.card {width: 90vw; height: auto; padding:0;}*/
+}
+@media screen and (max-width: 700px) {
+	.res-out-table ul li h3 {
+		padding: 1px;
+	}
+	.flex-container h2 {
+		margin: 1px; 
+	}
+	.flex-container h2 br {
+		display: none;
+	}
+}
+
+@media screen and (max-width: 500px) {
+	#result_center {
+		grid-template-columns: 1fr 1fr ;
+	}
+}</style>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-SFY6CHEC20"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-SFY6CHEC20');
+</script>
+
+</head><body tabindex="0">
+
+	<!-- Full main container	 -->
+	<div class="full-container">
+	
+		<div class="maintitle">
+	<div class="flex-container keep-row">
+		<h1>Hi Lo Calculator</h1>
+		<div class="help-container">
+</div>	</div>
+	<span>
+		An advanced calculator to simulate the High Low game	</span>
+</div>
+
+
+		<div class="grid-container grid-autoflow-col mt1 all-transitions">
+			<!-- First element of grid container: Panel -->
+			<div id="calc_card" class="card white h100">
+				<div class="calc-container">
+					<!-- Main Settings -->
+					<div id="first_line" class="flex-container calc-settings keep-row header">
+						<h2 class="m0 mr1">
+							<div class="flex-container keep-row space-around align-center">
+								<label for="strategy">Strategy:</label>&nbsp; 
+								<div class="help-container">
+	<a href="#" class="m0 help-trigger"><i class="fas fa-question-circle" style=""></i></a>
+	<div id="help_dropdown" class="help-dropdown hidden">
+		<div class="help-card white ta-c">
+			<div class="flex-container flex-col">
+				
+										Strategy can be <br>
+										0, 1 or 2 <br>
+												</div>
+		</div>
+	</div>
+</div>								<input name="strategy" id="strategy" class="input-small head2" style="width: 4ch;" value="0">
+							</div>
+						</h2>
+						<h2 class="m0 mr1"><label for="odds">Odds:</label> 
+							<input name="odds" id="odds" class="input-small head2" style="width: 4ch;" value="2">
+						</h2>
+						<h2 class="m0 mr1"><label for="incr">Incr:</label> 
+							<input name="incr" id="incr" class="input-small head2" style="width: 4ch;" value="100">%
+						</h2>
+					</div>
+					<!-- Second Line -->
+					<!-- Config -->
+					<div class="calc-settings flex-container flex-col space-around bottom calcleft">
+						<div class="grid-container keep-row" style="gap:0.2em;">
+							<div class="flex-container keep-row space-around align-center">
+								<label for="margin">MIN BET: </label>
+								<div class="help-container">
+	<a href="#" class="m0 help-trigger"><i class="fas fa-question-circle" style=""></i></a>
+	<div id="help_dropdown" class="help-dropdown hidden">
+		<div class="help-card white ta-c">
+			<div class="flex-container flex-col">
+				
+										Min bet is the stuff bet played waiting some particular condition. <br>
+										i.e. '7 losts in a row'.<br>
+										It's used in some game strategies.
+												</div>
+		</div>
+	</div>
+</div>							</div>
+							<input id="min_bet" class="input-small" value="1">
+							<span><label for="bas_bet">BAS BET:</label> </span> <input id="bas_bet" class="input-small" value="1">
+							<span><label for="hilo">HIGH/LOW:</label> </span><input id="hilo" class="input-small" style="width: 2ch;" value="0">
+							<div class="flex-container keep-row space-around align-center">
+								<label for="min_losses">MIN LOSSES:</label> 
+								<div class="help-container">
+	<a href="#" class="m0 help-trigger"><i class="fas fa-question-circle" style=""></i></a>
+	<div id="help_dropdown" class="help-dropdown hidden">
+		<div class="help-card white ta-c">
+			<div class="flex-container flex-col">
+				
+										Script will wait this <em>losses in a row</em> before to begin play martingale<br>
+										i.e., with min_losses=3 play will be <br>
+										LWLWWWLLWLLL PLAY
+												</div>
+		</div>
+	</div>
+</div>							</div>
+							<input id="min_losses" class="input-small" style="width: 2ch;" value="4">
+							<span><label for="wait_play">WAIT PLAY:</label> </span><input id="wait_play" class="input-small" style="width: 2ch;" value="1">
+						</div>
+					</div>
+					<!-- Roll -->
+					<div class="flex-container flex-col space-around main h100">
+						<button id="res_num" class="round highcontrast">00000</button>
+						<button id="startcalc" class="round highcontrast">Test</button>
+					</div>
+					<!-- Config -->
+					<div class="calc-settings flex-container flex-col bottom calcright">
+						<div class="grid-container keep-row" style="gap:0.2em;">
+							<span><label for="max_rolls" class="coral">TOTAL ROLLS: </label></span><input id="max_rolls" class="input-small" value="100000">
+							<span><label for="max_bet">MAX BET: </label></span><input id="max_bet" class="input-small" value="n/a">
+							<span><label for="max_win">MAX WIN: </label></span><input id="max_win" class="input-small" value="n/a">
+							<span><label for="max_plays">MAX PLAYS: </label></span><input id="max_plays" class="input-small" style="width: 5ch;" value="n/a">
+							<div class="flex-container keep-row space-around">
+								<label for="margin">MARGIN: </label>
+								<div class="help-container">
+	<a href="#" class="m0 help-trigger"><i class="fas fa-question-circle" style=""></i></a>
+	<div id="help_dropdown" class="help-dropdown hidden">
+		<div class="help-card white ta-c">
+			<div class="flex-container flex-col">
+				
+										Margin is the <em>website fee</em> To give an example, <br>
+										<span><a class="coral" href="https://bit.ly/2XFuZVQ" target="_blank">Freebitcoin</a> charge a 5%,<span>
+												</span></span></div>
+		</div>
+	</div>
+</div>							</div>
+							<input id="margin" class="input-small" style="width: 5ch;" value="0.5%">
+						</div>
+					</div>
+					<!-- Advanced Settings -->
+					<div id="advanced_line" class="flex-container calc-settings keep-row advanced">
+						<span class="m0 mr1"><label for="chunk_size">Chunk Size:</label> <br>
+							<input name="chunk_size" id="chunk_size" class="input-small" style="width: 6ch;" value="1000">
+						</span>
+						<span class="m0 mr1"><label for="idle_time">Delay between chunks:</label> <br>
+							<input name="idle_time" id="idle_time" class="input-small" style="width: 4ch;" value="5">
+							<span>ms</span>
+						</span>
+					</div>
+
+					<!-- Footer  -->
+					<div class="card-bottom flex-container footer">
+						<div><span id="calc_out_message" class="calc-message"></span></div>
+					</div>
+				</div>
+			</div>
+			<!-- Second Element of grid container: chart -->
+			<div class="card white h100">
+				<div id="result_container" class="hidden opaque all-transitions flex-container flex-col space-around h100">
+					<div id="result_top" class="flex-container keep-row">
+						<h1 class="m0 mt1">
+							<span> Results </span>
+						</h1>
+					</div>
+					<div id="result_center" class="grid-container grid-3col keep-row">
+						<div><span id="res_rolls">Total Rolls: 	<span class="res-num"></span></span></div>
+						<div><span id="res_plays">Total Plays: 	<span class="res-num"></span></span></div>
+						<div><span id="res_wagered">Wagered: 	<span class="res-num"></span></span></div>
+						<div><span id="res_max_bet">Max Bet: 	<span class="res-num"></span></span></div>
+						<div><span id="res_profit">Profit: 	<span class="res-num"></span></span></div>
+						<div class="flex-container flex-col">
+							<span id="res_max_rowl">Max Lost in a row: 	<span class="res-num" style="color: coral;line-height:1em;font-size:1em;"></span></span>
+							<span id="res_max_roww">Max Wins in a row: 	<span class="res-num" style="line-height: 1em; font-size: 1em;"></span></span>
+						</div>
+					</div>
+					<div id="result_bottom" class="card-bottom flex-container">
+						<div><span id="res_exec_time">Execution Time: 	<span class="res-num"></span></span></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="graph_result" class="grid-container grid-1col mt1">
+			<div class="card double-w white h100">
+				<canvas id="chart_wagered"></canvas>
+			</div>
+		</div>
+	</div> 
+</body>
+
+<script type="text/javascript" src="js/8178c598ba.js" crossorigin="anonymous" async=""></script>
+<!-- <script type="text/javascript" src="/js/lazysizes.min.js" async=""></script> -->
+<script type="text/javascript" src="js/js-graph_init.js" crossorigin="anonymous" async=""></script>
+<script type="text/javascript" src="js/js-common.js" crossorigin="anonymous" defer></script>
+<script type="text/javascript" src="js/js-hide_tips.js" crossorigin="anonymous" defer></script>
+<script type="text/javascript" src="js/js-help.js" crossorigin="anonymous" defer></script>
+<script type="text/javascript" src="js/js-hilocalc.js" crossorigin="anonymous" defer></script>
+
+<script defer>
+var graphScriptLoaded = false;
+
+
+</script>
+</html>

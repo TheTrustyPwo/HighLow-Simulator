@@ -1,0 +1,31 @@
+.card {
+	background-color:var(--dark-grey); 
+	box-shadow: 0 0 5em -1em black; text-align: center; 
+}
+
+.card.pearl {
+	background-color: #EAE0C8;
+	color: #666;
+}
+
+/* Colors and styles */
+.white {color: white;}
+.lgrey {color: #ccc;}
+.lime {color: lime;}
+.coral {color: coral;}
+.azul {color: #85d3d3; }
+
+.bold {font-weight: bold;}
+.monospace {font-family: monospace;}
+
+
+/* Transitions */
+.all-transitions {transition: all 0.5s ease-in-out;}
+
+/* Browser Specifics */
+::-moz-placeholder { color: #cbd0d5; }
+:-ms-input-placeholder { color: #cbd0d5; }
+::placeholder { color: #cbd0d5; }
+
+
+

@@ -1,0 +1,41 @@
+button.round {
+	background-color: var(--azul);
+	color: white;
+	border-inline: none;
+	border-style: none;
+	border-radius: 51px;
+	width: 3em;
+	height: 3em;
+	margin: 0 auto;
+	padding: 0.3em;
+	font-size: 2em;
+	margin: 0.7rem auto;
+
+}
+
+button.round.highcontrast {
+	background-color: #232323;
+   color: var(--azul);
+   border-radius: .5em;
+   width: 6em;
+   height: 2em;
+   font-weight: 900;
+}
+
+button.round:focus {
+	outline: none;
+}
+
+button.round:hover {
+	box-shadow: inset 3px -3px 30px #1beabd, 0px 0px 10px #10abff;
+	background-color: #35b3b3;
+	cursor: pointer;
+}
+
+button.round.highcontrast:hover {
+	color: #232323;
+}
+
+button.round.light:hover {
+
+}

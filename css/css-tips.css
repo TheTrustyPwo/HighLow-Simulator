@@ -1,0 +1,46 @@
+.tip {
+	line-height: var(--tip-height);
+	max-height: var(--tip-height);
+	height: var(--tip-height);
+	color: #eee; 
+	border: 1px solid #eee;
+	border-radius: 1em;
+	background-color: #444; 
+	/*transition: all 0.5s ease;*/
+	width: var(--double-card-width);
+	position: relative;
+	margin: 1px 0 0 0;
+}
+
+.tip.orange {
+	color: #ff6600;
+	border-color: #ff6600;
+	background-color: #faffa8;
+}
+
+.tip.green {
+	color: lime;
+	border-color: lime;
+	background-color: #000000;
+}
+.tip.hide {
+	height: 0;
+	opacity: 0;
+	margin: 0;
+	padding: 0;
+}
+.tip-container {
+	max-height: 3em;
+}
+
+.tip a.dismiss {
+	position: absolute;
+	right: 1em; 
+}
+
+@media screen and (max-width: 700px) { 
+	.tip{
+		width: 90vw;
+		font-size: .8em;
+	}
+}

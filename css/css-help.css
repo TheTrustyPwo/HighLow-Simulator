@@ -1,0 +1,48 @@
+.help-container {
+	width: max-content;
+}
+.help-container:hover .help-dropdown {display: block;}
+
+.help-dropdown {
+	position: absolute; width: max-content; max-width: 30em; height: auto;
+	z-index: 99;
+}
+
+.help-card {
+	display: flex; flex-direction: column; justify-content: flex-start;
+	border-radius: 1em ;padding:1.3em; 
+	background: linear-gradient(90deg, #666666 21px, transparent 1%) center, linear-gradient(#666666 21px, transparent 1%) center, #85d3d3;
+  	background-size: 22px 22px;
+	box-shadow: 0 0 5em -1em black; border: 1px solid #85d3d3; text-align: center; 
+}
+
+.help-close {
+	position: absolute;
+	top: 5px;
+	left: 5px;
+	font-size: 3em;
+	color: darkgreen;
+	display: none;
+}
+
+.help-close:hover {
+	color: coral;
+}
+
+.help-card .grid-container {
+	width: auto;
+	height: auto;
+	background-color: #323232ba;
+	padding: 0.3em 1em;
+	margin: 0.3em 0;
+	border-color: #85d3d3;
+}
+
+.help-card .grid-container img {
+	margin: auto;
+}
+
+@media screen and (max-width: 1200px) {
+	/*.help-close {display: block;}*/
+	.help-dropdown {max-width: 70vw; width: 30em; left:0; right: 0; margin-right: auto; margin-left: auto}
+}
